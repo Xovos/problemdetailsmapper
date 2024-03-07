@@ -9,20 +9,7 @@ static MAPS: RwLock<Vec<MapFn>> = RwLock::new(Vec::new());
 pub struct ProblemDetailsMapper;
 
 impl ProblemDetailsMapper {
-    pub fn map(error: Box<dyn Error>) -> ProblemDetails {
-        Self::map_types(error)
-    }
-
-    pub fn setup<F>(setup: F) -> Result<(), MapperError> 
-        where F: Fn(&mut ProblemDetailsOptions) {
-        let mut maps = MAPS.write().map_err(|e| MapperError::new("error getting write lock", Some(Box::new(e))))?;
-        let mut options = ProblemDetailsOptions::new();
-        setup(&mut options);
-        *maps = options.maps;
-        Ok(())
-    }
-
-    fn map_types(error: Box<dyn Error>) -> ProblemDetails {
+    pub fn map(error: Box<dyn Error>) -> Option<ProblemDetails> {
         let mut details: Option<ProblemDetails> = None;
 
         if let Ok(maps) = MAPS.read() {
@@ -32,7 +19,15 @@ impl ProblemDetailsMapper {
         }
 
         details
-            .unwrap_or_else(|| error.into_problemdetails())
+    }
+
+    pub fn setup<F>(setup: F) -> Result<(), MapperError> 
+        where F: Fn(&mut ProblemDetailsOptions) {
+        let mut maps = MAPS.write().map_err(|e| MapperError::new("error getting write lock", Some(Box::new(e))))?;
+        let mut options = ProblemDetailsOptions::new();
+        setup(&mut options);
+        *maps = options.maps;
+        Ok(())
     }
 }
 
@@ -52,9 +47,21 @@ impl ProblemDetailsOptions {
         self.maps.push(&Self::map_type::<TType>)
     }
 
+    pub fn map_std_err(&mut self) {
+        self.maps.push(&Self::map_default_error)
+    }
+
     fn map_type<TType>(error: &Box<dyn Error>) -> Option<ProblemDetails>
         where TType : Error + IntoProblemDetails + 'static {
         let concrete_error = error.as_ref().downcast_ref::<TType>()?;
         Some(concrete_error.into_problemdetails())
+    }
+
+    fn map_default_error(error: &Box<dyn Error>) -> Option<ProblemDetails> {
+        use crate::builders::problemdetails_builder::ProblemDetailsBuilder;
+        const TYPE: &'static str = "https://errors.io/unkownerror";
+        Some(ProblemDetailsBuilder::build_server_error(
+            Some(format!("{}", error)),
+            Some(TYPE)))
     }
 }
