@@ -22,14 +22,10 @@ mod tests {
         assert_eq!(setup_result.is_ok(), true);
 
         let error = MapperError::new("test", None);
-        let map_result = ProblemDetailsMapper::map(Box::new(error));
+        let result = ProblemDetailsMapper::map(Box::new(error));
 
-        assert_eq!(map_result.is_ok(), true);
-
-        let result = map_result.unwrap();
-
-        assert_eq!(result.0, StatusCode::INTERNAL_SERVER_ERROR);
-        assert_eq!(result.1.detail, Some("test".to_string()));
+        assert_eq!(result.status, Some(StatusCode::INTERNAL_SERVER_ERROR));
+        assert_eq!(result.detail, Some("test".to_string()));
     }
 
     #[test]
@@ -70,13 +66,9 @@ mod tests {
         assert_eq!(setup_result.is_ok(), true);
 
         let error = TestError::new();
-        let map_result = ProblemDetailsMapper::map(Box::new(error));
+        let result = ProblemDetailsMapper::map(Box::new(error));
 
-        assert_eq!(map_result.is_ok(), true);
-
-        let result = map_result.unwrap();
-
-        assert_eq!(result.0, StatusCode::BAD_REQUEST);
-        assert_eq!(result.1.detail, Some("test".to_string()));
+        assert_eq!(result.status, Some(StatusCode::BAD_REQUEST));
+        assert_eq!(result.detail, Some("test".to_string()));
     }
 }

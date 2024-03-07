@@ -1,24 +1,16 @@
 use std::{error::Error, sync::RwLock};
-
-use http::StatusCode;
 use problem_details::ProblemDetails;
-
 use crate::{into_problemdetails::IntoProblemDetails, mapper_error::MapperError};
 
 type MapFn = &'static (dyn Fn(&Box<dyn Error>) -> Option<ProblemDetails> + Sync);
-
 
 static MAPS: RwLock<Vec<MapFn>> = RwLock::new(Vec::new());
 
 pub struct ProblemDetailsMapper;
 
 impl ProblemDetailsMapper {
-    pub fn map(error: Box<dyn Error>) -> Result<(StatusCode, ProblemDetails), MapperError> {
-        let details = Self::map_types(error)?;
-        let status = details.status
-            .unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
-
-        return Ok(( status, details ));
+    pub fn map(error: Box<dyn Error>) -> ProblemDetails {
+        Self::map_types(error)
     }
 
     pub fn setup<F>(setup: F) -> Result<(), MapperError> 
@@ -30,15 +22,17 @@ impl ProblemDetailsMapper {
         Ok(())
     }
 
-    fn map_types(error: Box<dyn Error>) -> Result<ProblemDetails, MapperError> {
+    fn map_types(error: Box<dyn Error>) -> ProblemDetails {
         let mut details: Option<ProblemDetails> = None;
 
-        for map in MAPS.read().map_err(|e| MapperError::new("register before mapping.", Some(Box::new(e))))?.iter() {
-            details = details.or_else(|| map(&error));
+        if let Ok(maps) = MAPS.read() {
+            for map in maps.iter() {
+                details = details.or_else(|| map(&error));
+            }
         }
 
-        Ok(details
-            .unwrap_or_else(|| error.into_problemdetails()))
+        details
+            .unwrap_or_else(|| error.into_problemdetails())
     }
 }
 
