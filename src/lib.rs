@@ -1,7 +1,7 @@
-pub mod problemdetails_mapper;
-pub mod into_problemdetails;
-pub mod problemdetails_builder;
-pub mod mapper_error;
+pub mod mappers;
+pub mod traits;
+pub mod builders;
+pub mod errors;
 
 #[cfg(test)]
 mod tests {
@@ -9,9 +9,9 @@ mod tests {
 
     use http::StatusCode;
 
-    use crate::{into_problemdetails::IntoProblemDetails, problemdetails_builder::ProblemDetailsBuilder, problemdetails_mapper::ProblemDetailsMapper};
+    use crate::{builders::problemdetails_builder::ProblemDetailsBuilder, mappers::problemdetails_mapper::ProblemDetailsMapper, traits::into_problemdetails::IntoProblemDetails};
 
-    use self::mapper_error::MapperError;
+    use self::errors::mapper_error::MapperError;
 
     use super::*;
 

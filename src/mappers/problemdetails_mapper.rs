@@ -1,6 +1,6 @@
 use std::{error::Error, sync::RwLock};
 use problem_details::ProblemDetails;
-use crate::{into_problemdetails::IntoProblemDetails, mapper_error::MapperError};
+use crate::{traits::into_problemdetails::IntoProblemDetails, errors::mapper_error::MapperError};
 
 type MapFn = &'static (dyn Fn(&Box<dyn Error>) -> Option<ProblemDetails> + Sync);
 

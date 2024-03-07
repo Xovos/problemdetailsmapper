@@ -1,6 +1,6 @@
 use problem_details::ProblemDetails;
 
-use super::problemdetails_builder::ProblemDetailsBuilder;
+use crate::builders::problemdetails_builder::ProblemDetailsBuilder;
 
 pub trait IntoProblemDetails {
     fn into_problemdetails(&self) -> ProblemDetails;
