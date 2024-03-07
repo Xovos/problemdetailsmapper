@@ -94,7 +94,7 @@ Feel free to explore these examples for a better understanding of how to integra
 Contributions to the Problem Details Mapper are welcome! If you encounter any issues, have ideas for improvements, or would like to contribute new features, please feel free to open an issue or submit a pull request on the repository.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 * Inspired by [Hellang.Middleware.ProblemDetails](https://www.nuget.org/packages/Hellang.Middleware.ProblemDetails) nuget package for C# for Problem Details Mapping in ASP.net HTTP APIs.
