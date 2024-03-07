@@ -81,6 +81,15 @@ fn main() {
 }
 ```
 
+## Examples
+
+Examples demonstrating how to use the Problem Details Mapper library can be found in the `examples` folder of the repository. Below are some examples showcasing various usage scenarios:
+
+- [Basic Usage](examples/basic_usage.rs): Demonstrates the basic usage of the library, mapping a standard Rust error to a Problem Details response.
+- [Custom Error Types](examples/custom_error_types.rs): Illustrates how to define and map custom error types to Problem Details responses.
+
+Feel free to explore these examples for a better understanding of how to integrate and utilize the Rust Problem Details Mapper in your projects.
+
 ## Contributing
 Contributions to the Problem Details Mapper are welcome! If you encounter any issues, have ideas for improvements, or would like to contribute new features, please feel free to open an issue or submit a pull request on the repository.
 
