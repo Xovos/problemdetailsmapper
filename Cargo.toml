@@ -1,5 +1,5 @@
 [package]
-name = "problemdetailsmapper"
+name = "problem-details-mapper"
 version = "0.1.0"
 edition = "2021"
 
