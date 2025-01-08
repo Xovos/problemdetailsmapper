@@ -2,6 +2,13 @@
 name = "problem-details-mapper"
 version = "0.1.0"
 edition = "2021"
+authors = ["Xovos"]
+description = "library designed to simplify error handling and response generation in Rust-based RESTful API applications"
+repository = "https://github.com/Xovos/problemdetailsmapper"
+readme = "README.md"
+keywords = ["http", "problemdetails"]
+categories = ["web-programming"]
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
